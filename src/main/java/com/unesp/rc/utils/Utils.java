@@ -1,5 +1,7 @@
 package com.unesp.rc.utils;
 
+import com.unesp.rc.model.Player;
+
 import java.util.Objects;
 import static java.lang.Math.sqrt;
 
@@ -16,16 +18,16 @@ public class Utils {
         return vetor;
     }
 
-    public static int verificaResposta(int[] vetor, int numEscolhido, String escolha) {
+    public static int verificaResposta(int[] vetor, Player jogador) {
         int boolResposta = 0;
 
-        if (numEscolhido < 0 || numEscolhido >= 100) {
+        if (jogador.getNumEscolhido() < 0 || jogador.getNumEscolhido() >= 100) {
             return 0;
         }
 
-        if (vetor[numEscolhido] != 0 && Objects.equals(escolha, "S")) {
+        if (vetor[jogador.getNumEscolhido()] != 0 && Objects.equals(jogador.getEscolha(), "S")) {
             boolResposta = 1;
-        } else if (vetor[numEscolhido] == 0 && Objects.equals(escolha, "N")) {
+        } else if (vetor[jogador.getNumEscolhido()] == 0 && Objects.equals(jogador.getEscolha(), "N")) {
             boolResposta = 2;
         }
 

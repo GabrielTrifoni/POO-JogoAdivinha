@@ -1,61 +1,65 @@
 package com.unesp.rc.demo;
 
 import com.unesp.rc.input.Input;
+import com.unesp.rc.model.Player;
 import com.unesp.rc.utils.Utils;
 
 public class JogoAdivinha {
     public static void main(String[] args) {
-        int quantRodadas = 5, quantChutes, resposta, numEscolhido, numOcorrencias, pontos = 0;
+        int quantRodadas = 5;
         int[] vetor;
+
+        Player jogador = new Player(5);
 
         for (int i = 1; i <= quantRodadas; i++) {
             System.out.println("*----------------*\nRodada " + i + "!!\n*----------------*\n");
 
-            quantChutes = 5;
+            jogador.setQuantChutes(5);
+
             vetor = Utils.criaVetor();
             //System.out.println("Vetor: " + Arrays.toString(vetor));
 
             System.out.print("Digite um numero (de 0 a 99): ");
-            numEscolhido = Input.lerInt();
+            jogador.setNumEscolhido(Input.lerInt());
 
             System.out.print("Vc acha que o numero esta na lista?\n(S/N): ");
-            String escolha = Input.lerString();
+            jogador.setEscolha(Input.lerString());
 
-            resposta = Utils.verificaResposta(vetor, numEscolhido, escolha);
+            jogador.setResposta(Utils.verificaResposta(vetor, jogador));
 
-            if (resposta == 1 || resposta == 2) {
+            if (jogador.getResposta() == 1 || jogador.getResposta() == 2) {
                 System.out.println("Sim, o numero esta na lista!");
             } else {
-                System.out.println("Errou... Ele estava na lista");
+                System.out.println("Errou... Ele nao estava na lista");
             }
 
-            if (resposta == 1) {
+            if (jogador.getResposta() == 1) {
                 do {
-                    System.out.print("Quantas vezes vc acha que o numero aparece na lista? (" + quantChutes + " chutes): ");
-                    numOcorrencias = Input.lerInt();
+                    System.out.print("Quantas vezes vc acha que o numero aparece na lista? (" + jogador.getQuantChutes() + " chutes): ");
+                    jogador.setNumOcorrencias(Input.lerInt());
 
-                    if (Utils.mod(numOcorrencias - vetor[numEscolhido]) >= 26) {
+                    if (Utils.mod(jogador.getNumOcorrencias() - vetor[jogador.getNumEscolhido()]) >= 26) {
                         System.out.println("Esta congelando...");
-                    } else if (Utils.mod(numOcorrencias - vetor[numEscolhido]) >= 12) {
+                    } else if (Utils.mod(jogador.getNumOcorrencias() - vetor[jogador.getNumEscolhido()]) >= 12) {
                         System.out.println("Esta frio.");
-                    } else if (Utils.mod(numOcorrencias - vetor[numEscolhido]) >= 5) {
+                    } else if (Utils.mod(jogador.getNumOcorrencias() - vetor[jogador.getNumEscolhido()]) >= 5) {
                         System.out.println("Esta esquentando!");
-                    } else if(Utils.mod(numOcorrencias - vetor[numEscolhido]) >= 1){
+                    } else if (Utils.mod(jogador.getNumOcorrencias() - vetor[jogador.getNumEscolhido()]) >= 1) {
                         System.out.println("Esta quente!!!!");
                     } else {
                         System.out.println("Acertou!!!");
-                        pontos++;
+                        jogador.setPontos(jogador.getPontos() + 1);
                         break;
                     }
-                    quantChutes--;
-                } while(quantChutes > 0);
+                    jogador.setQuantChutes(jogador.getQuantChutes() - 1);
+                } while (jogador.getQuantChutes() > 0);
             }
 
-            if(quantChutes == 0){
-                System.out.println("Errou... Ele aparecia " + vetor[numEscolhido] + " vezes");
+            if (jogador.getQuantChutes() == 0) {
+                System.out.println("Errou... Ele aparecia " + vetor[jogador.getNumEscolhido()] + " vezes");
             }
         }
 
-        System.out.println("Vc fez " + pontos + "/5 pontos");
+        System.out.println("Vc fez " + jogador.getPontos() + "/5 pontos");
     }
 }
